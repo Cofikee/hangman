@@ -1,0 +1,54 @@
+import random
+print('H A N G M A N')
+hangman_list = 'python', 'java', 'kotlin', 'javascript'
+right_choice = list(random.choice(hangman_list))
+guess_word = list('-'*len(right_choice))
+tries = 0
+cache = list()
+print_word = ''
+saved_print_word = '-'*len(right_choice)
+if input('Type "play" to play the game, "exit" to quit: ') == 'play':
+    print('\n', '-'*len(right_choice), sep='')
+else:
+    print_word = 'exit'
+    tries = 9
+while tries < 8:
+    print_word = ''
+    guess = input('Input a letter: ')
+    while guess.isupper() or len(guess) > 1 or not guess.encode().isalpha() or guess in cache:
+        if len(guess) > 1:
+            print('You should input a single letter')
+        elif guess in cache:
+            print("You've already guessed this letter")
+        else:
+            print('Please enter a lowercase English letter')
+        print('\n', saved_print_word, sep='')
+        guess = input('Input a letter: ')
+
+    if guess in right_choice:
+        changing_index = [index for index, element in enumerate(right_choice) if element == guess]
+        for i in changing_index:
+            guess_word[i] = guess
+    else:
+        print("That letter doesn't appear in the word")
+        tries += 1
+        pass
+
+    for i in range(len(guess_word)):
+        print_word += guess_word[i]
+
+    if tries <= 7:
+        print('\n', print_word, sep='')
+
+    if '-' not in print_word:
+        tries = 9
+
+    saved_print_word = print_word
+    cache.append(guess)
+
+if '-' in print_word:
+    print('You lost!')
+elif print_word == 'exit':
+    pass
+else:
+    print('You guessed the word!\nYou survived!')
